@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Node.js & Express App - Work</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+</head>
+<body>
+
+
+
+        <%- include("partials/header.ejs") %>
+
+
+    <div class="containertwo">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <!-- Task List Content (Existing Tasks) -->
+                <div class="row d-flex justify-content-center container">
+                    <div class="col-md-8">
+                        <div class="card-hover-shadow-2x mb-3 card">
+                            <div class="card-header-tab card-header">
+                                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                                    <i class="fa fa-tasks"></i>&nbsp;Task Lists
+                                </div>
+                            </div>
+                            <div class="scroll-area-sm">
+                                <perfect-scrollbar class="ps-show-limits">
+                                    <div style="position: static;" class="ps ps--active-y">
+                                        <div class="ps-content">
+                                            <ul class="list-group list-group-flush">
+                                                <% homeTasks.forEach((task) => { %>
+                                                <li class="list-group-item">
+                                                    <!-- Display task information here -->
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-2">
+                                                                <div class="custom-checkbox custom-control">
+                                                                    <!-- Add the task's taskIndex property as data-task-index -->
+                                                                    <input
+                                                                        class="custom-control-input"
+                                                                        id="checkbox<%= task.taskIndex %>"
+                                                                        type="checkbox"
+                                                                        data-task-index="<%= task.taskIndex %>"
+                                                                    >
+                                                                    <label
+                                                                        class="custom-control-label"
+                                                                        for="checkbox<%= task.taskIndex %>"
+                                                                        >&nbsp;</label
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading">
+                                                                    <%= task.title %>
+                                                                    <div class="badge badge-pill badge-info ml-2">
+                                                                        <%= task.status %>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="widget-subheading">
+                                                                    <i>By <%= task.owner %></i>
+                                                                </div>
+                                                            </div>
+                                                            <div class="widget-content-right">
+                                                                <button class="border-0 btn-transition btn btn-outline-success">
+                                                                    <i class="fa fa-check"></i>
+                                                                </button>
+                                                                <button class="border-0 btn-transition btn btn-outline-danger">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <% }); %>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </perfect-scrollbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Task Form -->
+                <form action="/create-home-task" method="post" class="work-card">
+                    <div class="form-group">
+                        <label for="taskTitle">Task Title</label>
+                        <input type="text" class="form-control" id="taskTitle" name="taskTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskOwner">Task Owner</label>
+                        <input class="form-control" id="taskOwner" name="taskOwner" required>
+                    </div>
+                    <div class="d-block text-right card-footer">
+                        <button class="btn btn-primary" type="submit">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Use event delegation to listen for changes on checkboxes
+        document.addEventListener("change", function (event) {
+          // Check if the event is triggered by the dynamically created checkbox
+          if (event.target.matches(".custom-control-input")) {
+            // Get the index of the task from the checkbox's data-task-index attribute
+            const index = parseInt(event.target.dataset.taskIndex);
+            // Get all list items with the 'list-group-item' class
+            const taskItems = document.querySelectorAll(".list-group-item");
+            // Get the corresponding task list item element by index
+            const taskItem = taskItems[index];
+            // Check if the checkbox is checked and add or remove the 'canceled-item' class accordingly
+            if (event.target.checked) {
+              taskItem.classList.add("canceled-item");
+            } else {
+              taskItem.classList.remove("canceled-item");
+            }
+          }
+        });
+      </script>
+</body>
+</html>
+
+
+
+<div class="footer">
+    <!-- Include the footer partial -->
+    <%- include("partials/footer.ejs") %>
+</div>
